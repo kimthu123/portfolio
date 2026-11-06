@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Layout: one left-aligned 12-column grid, big display type, quiet surfaces.
+  Colors are stored as RGB triplets so Tailwind opacity modifiers work (bg-accent/20).
+  Dark is the default look; light kicks in from the OS setting or the toggle.
+*/
+:root {
+  --bg: 18 19 23;          /* charcoal */
+  --surface: 26 28 33;     /* panels, inputs */
+  --raised: 36 39 46;      /* small fills inside panels */
+  --line: 46 49 58;        /* borders, rules */
+  --fg: 236 237 240;       /* off-white text */
+  --muted: 152 157 170;    /* secondary text */
+  --accent: 92 134 255;    /* electric blue */
+  --accent-ink: 9 13 30;   /* text on accent */
+  --ok: 74 222 128;        /* availability */
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    --bg: 245 246 248;
+    --surface: 255 255 255;
+    --raised: 234 236 241;
+    --line: 218 221 229;
+    --fg: 20 22 27;
+    --muted: 88 94 107;
+    --accent: 37 87 230;
+    --accent-ink: 255 255 255;
+    --ok: 22 163 74;
+    color-scheme: light;
+  }
+}
+
+:root[data-theme='light'] {
+  --bg: 245 246 248;
+  --surface: 255 255 255;
+  --raised: 234 236 241;
+  --line: 218 221 229;
+  --fg: 20 22 27;
+  --muted: 88 94 107;
+  --accent: 37 87 230;
+  --accent-ink: 255 255 255;
+  --ok: 22 163 74;
+  color-scheme: light;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+  body {
+    @apply font-sans antialiased;
+    background: rgb(var(--bg));
+    color: rgb(var(--fg));
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0 0 auto;
+    height: env(safe-area-inset-top, 0px);
+    z-index: 60;
+    background: rgb(var(--bg));
+  }
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+  ::selection {
+    background: rgb(var(--accent) / 0.3);
+  }
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent));
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+}
+
+@layer components {
+  .wrap {
+    width: 100%;
+    max-width: 76rem;
+    margin-inline: auto;
+    padding-left: max(1.25rem, env(safe-area-inset-left, 0px));
+    padding-right: max(1.25rem, env(safe-area-inset-right, 0px));
+  }
+  @media (min-width: 768px) {
+    .wrap {
+      padding-left: max(2.5rem, env(safe-area-inset-left, 0px));
+      padding-right: max(2.5rem, env(safe-area-inset-right, 0px));
+    }
+  }
+  .btn {
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded-lg px-5 text-sm font-medium transition-colors duration-200;
+  }
+  .btn-primary {
+    @apply bg-accent text-accent-ink hover:bg-accent/85;
+  }
+  .btn-secondary {
+    @apply border border-line text-fg hover:border-fg/40 hover:bg-surface;
+  }
+  .btn-quiet {
+    @apply px-3 text-muted hover:text-fg;
+  }
+  .chip {
+    @apply inline-flex items-center rounded-md border border-line bg-surface px-2.5 py-1 text-sm text-fg/90 transition-colors;
+  }
+  .field {
+    @apply w-full rounded-lg border border-line bg-surface px-3.5 py-2.5 text-fg placeholder:text-muted/70 transition-colors focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30;
+  }
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:text-accent-ink;
+  }
+}
